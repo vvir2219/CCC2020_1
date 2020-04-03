@@ -17,7 +17,7 @@ def read(filename):
     return list(map(line_to_data, lines[1:]))
 
 def solve(data):
-    flights = {} # map from [start, destination] to a set of takeoff times
+    flights = {} # map from (start, destination) to a set of takeoff times
 
     for timestamp, lat, lng, alt, start, destination, takeoff in data:
         if ( start, destination ) not in flights:
@@ -27,9 +27,10 @@ def solve(data):
 
     solution = [] # array of sorted (start, destination, len(flights))
     for start, destination in flights.keys():
-        solution.append([start, destination, len(flights[(start, destination)])])
+        if len(flights[(start, destination)]) > 0:
+            solution.append([start, destination, len(flights[(start, destination)])])
 
-    return sorted(sorted(solution, key=lambda x: x[1]), key=lambda x: x[0])
+    return sorted(sorted(solution, key=lambda x: x[0]), key=lambda x: x[1])
 
 def print_solution(solution, filename):
     with open(filename, "w") as f:
