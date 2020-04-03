@@ -1,3 +1,5 @@
+import operator
+
 base_input = "./input/level2_"
 base_output = "./output/level2_"
 
@@ -21,16 +23,15 @@ def solve(data):
 
     for timestamp, lat, lng, alt, start, destination, takeoff in data:
         if ( start, destination ) not in flights:
-            flights[( start, destination )] = set()
+            flights[( start, destination )] = list()
 
-        flights[( start, destination )].add(timestamp)
+        flights[( start, destination )].append(timestamp)
 
-    solution = [] # array of sorted (start, destination, len(flights))
-    for start, destination in flights.keys():
-        if len(flights[(start, destination)]) > 0:
-            solution.append([start, destination, len(flights[(start, destination)])])
+    solution = []
+    for s, d in flights.keys():
+        solution.append([s, d, sorted(flights[(s, d)])])
 
-    return sorted(sorted(solution, key=lambda x: x[0]), key=lambda x: x[1])
+    return sorted(solution, key=operator.itemgetter(0, 1))
 
 def print_solution(solution, filename):
     with open(filename, "w") as f:
