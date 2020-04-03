@@ -40,6 +40,11 @@ def solve(data):
         [maxalt]
   ]
 
+def print_solution(solution, filename):
+    with open(filename, "w") as f:
+        for comb in solution:
+            print(" ".join(map(str, comb)), file=f)
+
 for level in range(5):
     filename_end = str(level + 1) + ".in"
 
