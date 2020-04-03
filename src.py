@@ -1,4 +1,5 @@
 base_input = "./input/level1_"
+base_output = "./output/level1_"
 
 def line_to_data(line):
     data = line.split(',')
@@ -40,6 +41,8 @@ def solve(data):
   ]
 
 for level in range(5):
-    data = read(base_input + str(level + 1) + ".in")
+    filename = base_input + str(level + 1) + ".in"
+
+    data = read(filename)
     solution = solve(data)
-    print_solution(solution)
+    print_solution(solution, filename)
