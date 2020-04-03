@@ -41,8 +41,8 @@ def solve(data):
   ]
 
 for level in range(5):
-    filename = base_input + str(level + 1) + ".in"
+    filename_end = str(level + 1) + ".in"
 
-    data = read(filename)
+    data = read(base_input + filename_end)
     solution = solve(data)
-    print_solution(solution, filename)
+    print_solution(solution, base_output + filename_end)
