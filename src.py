@@ -1,5 +1,5 @@
-base_input = "./input/level1_"
-base_output = "./output/level1_"
+base_input = "./input/level2_"
+base_output = "./output/level2_"
 
 def line_to_data(line):
     data = line.split(',')
@@ -7,6 +7,7 @@ def line_to_data(line):
     data[1] = float(data[1])
     data[2] = float(data[2])
     data[3] = float(data[3])
+    data[6] = int(data[6])
     return data
 
 def read(filename):
@@ -16,38 +17,25 @@ def read(filename):
     return list(map(line_to_data, lines[1:]))
 
 def solve(data):
-    mintimestamp, maxtimestamp = data[0][0], data[0][0]
-    minlat, maxlat = data[0][1], data[0][1]
-    minlng, maxlng = data[0][2], data[0][2]
-    maxalt = data[0][3]
+    flights = {} # map from [start, destination] to a set of takeoff times
 
-    for timestamp, lat, lng, alt in data:
-        if timestamp < mintimestamp: mintimestamp = timestamp
-        if timestamp > maxtimestamp: maxtimestamp = timestamp
+    for timestamp, lat, lng, alt, start, destination, takeoff in data:
+        if ( start, destination ) not in flights:
+            flights[( start, destination )] = set()
 
-        if lat < minlat: minlat = lat
-        if lat > maxlat: maxlat = lat
+        flights[( start, destination )].add(timestamp)
 
-        if lng < minlng: minlng = lng
-        if lng > maxlng: maxlng = lng
+    solution = [] # array of sorted (start, destination, len(flights))
+    for start, destination in flights.keys():
+        solution.append([start, destination, len(flights[(start, destination)])])
 
-        if alt > maxalt: maxalt = alt
-
-    return [ 
-        [mintimestamp, maxtimestamp],
-        [minlat, maxlat],
-        [minlng, maxlng],
-        [maxalt]
-  ]
+    return sorted(sorted(solution, key=lambda x: x[1]), key=lambda x: x[0])
 
 def print_solution(solution, filename):
     with open(filename, "w") as f:
-        for comb in solution:
-            print(" ".join(map(str, comb)), file=f)
+        print("\n".join(" ".join(map(solution, lambda x: map(x, lambda y: str(y))))), file=f)
 
 for level in range(5):
-    filename_end = str(level + 1) + ".in"
-
-    data = read(base_input + filename_end)
+    data = read(base_input + str(level + 1) + ".in")
     solution = solve(data)
-    print_solution(solution, base_output + filename_end)
+    print_solution(solution, base_output + str(level + 1) + ".out")
