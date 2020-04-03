@@ -32,12 +32,12 @@ def solve(data):
 
         if alt > maxalt: maxalt = alt
 
-    return (
-        mintimestamp, maxtimestamp,
-        minlat, maxlat,
-        minlng, maxlng,
-        maxalt
-    )
+    return [ 
+        [mintimestamp, maxtimestamp],
+        [minlat, maxlat],
+        [minlng, maxlng],
+        [maxalt]
+  ]
 
 for level in range(5):
     data = read(base_input + str(level + 1) + ".in")
