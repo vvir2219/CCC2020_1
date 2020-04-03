@@ -33,7 +33,7 @@ def solve(data):
 
 def print_solution(solution, filename):
     with open(filename, "w") as f:
-        print("\n".join(" ".join(map(solution, lambda x: map(x, lambda y: str(y))))), file=f)
+        print("\n".join(map(lambda line: " ".join(map(lambda y: str(y), line)), solution)), file=f)
 
 for level in range(5):
     data = read(base_input + str(level + 1) + ".in")
