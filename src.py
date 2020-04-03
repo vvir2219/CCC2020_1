@@ -23,15 +23,15 @@ def solve(data):
 
     for timestamp, lat, lng, alt, start, destination, takeoff in data:
         if ( start, destination ) not in flights:
-            flights[( start, destination )] = list()
+            flights[( start, destination )] = set()
 
-        flights[( start, destination )].append(timestamp)
+        flights[( start, destination )].add(takeoff)
 
     solution = []
     for s, d in flights.keys():
-        solution.append([s, d, sorted(flights[(s, d)])])
+        solution.append([s, d, len(flights[(s, d)])])
 
-    return sorted(solution, key=operator.itemgetter(0, 1))
+    return filter(lambda x: x[2] > 0, sorted(solution, key=operator.itemgetter(0, 1)))
 
 def print_solution(solution, filename):
     with open(filename, "w") as f:
